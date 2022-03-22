@@ -1,5 +1,7 @@
 import React from "react";
 
+// Ыузфкфеу Statistics component
+
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad;
   const average = ((good - bad) / (good + neutral + bad)) * 100 || 0;
