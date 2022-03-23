@@ -6,10 +6,13 @@ const StatisticsLine = ({ text, value, sign }) => {
   };
 
   return (
-    <p>
-      {capitalizeFirstLetter(text)}: {value}
-      {sign}
-    </p>
+    <tr>
+      <td>{capitalizeFirstLetter(text)}:</td>
+      <td>
+        {value}
+        {sign}
+      </td>
+    </tr>
   );
 };
 

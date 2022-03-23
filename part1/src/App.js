@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Button from "./Button";
+import ButtonsLine from "./ButtonsLine";
 import Header from "./Header";
 import Statistics from "./Statistics";
 
@@ -24,22 +24,24 @@ const App = () => {
   };
 
   return (
-    <div>
-      <Header />
-      <Button
-        onClickHandler={giveReview(reviewTypes[0])}
-        name={reviewTypes[0]}
-      />
-      <Button
-        onClickHandler={giveReview(reviewTypes[1])}
-        name={reviewTypes[1]}
-      />
-      <Button
-        onClickHandler={giveReview(reviewTypes[2])}
-        name={reviewTypes[2]}
-      />
-      <Statistics texts={reviewTypes} good={good} neutral={neutral} bad={bad} />
-    </div>
+    <table>
+      <tbody>
+        <Header text={"Give Feedback"} />
+        <ButtonsLine
+          reviewTypes={reviewTypes}
+          giveGoodReview={giveReview(reviewTypes[0])}
+          giveNeutralReview={giveReview(reviewTypes[1])}
+          giveBadReview={giveReview(reviewTypes[2])}
+        />
+        <Header text={"Statistics"} />
+        <Statistics
+          texts={reviewTypes}
+          good={good}
+          neutral={neutral}
+          bad={bad}
+        />
+      </tbody>
+    </table>
   );
 };
 

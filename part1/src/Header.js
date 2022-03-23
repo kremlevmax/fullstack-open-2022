@@ -1,10 +1,12 @@
 import React from "react";
 
-const Header = () => {
+const Header = ({ text }) => {
   return (
-    <div>
-      <p>Give Feedback</p>
-    </div>
+    <tr>
+      <td colSpan='2'>
+        <b>{text}</b>
+      </td>
+    </tr>
   );
 };
 

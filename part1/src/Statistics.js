@@ -20,7 +20,11 @@ const Statistics = ({ texts, good, neutral, bad }) => {
       </>
     );
   } else {
-    return <p>No feedback given</p>;
+    return (
+      <tr>
+        <td colSpan='2'>No feedback given</td>
+      </tr>
+    );
   }
 };
 
