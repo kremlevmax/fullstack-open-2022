@@ -26,8 +26,11 @@ const App = () => {
     setAnecdoteRatings(copy);
   };
 
+  const bestAnecdoteVotesNumber = Math.max(...anecdoteRatings);
+
   return (
     <>
+      <h2>Anecdote of the day</h2>
       <div>{anecdotes[selected]}</div>
       <div>
         has {anecdoteRatings[selected]}{" "}
@@ -36,6 +39,22 @@ const App = () => {
 
       <button onClick={chooseRandomAnecdote}>Next</button>
       <button onClick={rateAnecdote}>Rate</button>
+      <div>------------------------------------------</div>
+
+      <h2>Anecdote with most votes</h2>
+      <div>
+        {
+          anecdotes[
+            anecdoteRatings.findIndex(
+              (rating) => rating === bestAnecdoteVotesNumber
+            )
+          ]
+        }
+      </div>
+      <div>
+        has {bestAnecdoteVotesNumber}{" "}
+        {bestAnecdoteVotesNumber === 1 ? "vote" : "votes"}
+      </div>
     </>
   );
 };
