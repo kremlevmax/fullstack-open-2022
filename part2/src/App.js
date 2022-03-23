@@ -12,8 +12,32 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [anecdoteRatings, setAnecdoteRatings] = useState(
+    Array(anecdotes.length).fill(0)
+  );
 
-  return <div>{anecdotes[selected]}</div>;
+  const chooseRandomAnecdote = () => {
+    setSelected(Math.floor(Math.random() * anecdotes.length));
+  };
+
+  const rateAnecdote = () => {
+    const copy = [...anecdoteRatings];
+    copy[selected] += 1;
+    setAnecdoteRatings(copy);
+  };
+
+  return (
+    <>
+      <div>{anecdotes[selected]}</div>
+      <div>
+        has {anecdoteRatings[selected]}{" "}
+        {anecdoteRatings[selected] === 1 ? "vote" : "votes"}
+      </div>
+
+      <button onClick={chooseRandomAnecdote}>Next</button>
+      <button onClick={rateAnecdote}>Rate</button>
+    </>
+  );
 };
 
 export default App;
