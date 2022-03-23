@@ -38,7 +38,7 @@ const App = () => {
         onClickHandler={giveReview(reviewTypes[2])}
         name={reviewTypes[2]}
       />
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      <Statistics texts={reviewTypes} good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
