@@ -7,6 +7,7 @@ const Content = ({ content }) => {
     <Part key={part.id} name={part.name} exercises={part.exercises} />
   ));
 
+  //reducer
   const total = content.reduce((partialSum, a) => partialSum + a.exercises, 0);
 
   return (
