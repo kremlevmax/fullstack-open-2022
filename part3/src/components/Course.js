@@ -3,11 +3,11 @@ import React from "react";
 import Header from "./Header";
 import Content from "./Content";
 
-const Course = ({ course }) => {
+const Course = ({ coursesData }) => {
   return (
     <>
-      <Header header={course.name} />
-      <Content content={course.parts} />
+      <Header header={coursesData.name} />
+      <Content content={coursesData.parts} />
     </>
   );
 };

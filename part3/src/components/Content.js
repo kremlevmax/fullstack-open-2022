@@ -1,6 +1,5 @@
 import React from "react";
 import Part from "./Part";
-import Total from "./Total";
 
 const Content = ({ content }) => {
   const parts = content.map((part) => (
@@ -8,14 +7,8 @@ const Content = ({ content }) => {
   ));
 
   //reducer
-  const total = content.reduce((partialSum, a) => partialSum + a.exercises, 0);
 
-  return (
-    <>
-      {parts}
-      <Total total={total} />
-    </>
-  );
+  return <>{parts}</>;
 };
 
 export default Content;

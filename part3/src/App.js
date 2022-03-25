@@ -1,31 +1,27 @@
 import React from "react";
-
+import coursesData from "./coursesData";
 import Course from "./components/Course";
+import Total from "./components/Total";
 
 const App = () => {
-  const course = {
-    id: 1,
-    name: "Half Stack application development",
-    parts: [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-        id: 1,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-        id: 2,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-        id: 3,
-      },
-    ],
-  };
+  const courses = coursesData.map((coursesData) => (
+    <Course key={coursesData.id} coursesData={coursesData} />
+  ));
 
-  return <Course course={course} />;
+  const total = coursesData.reduce((totalSum, course) => {
+    const exercises = course.parts.reduce((courseSum, partData) => {
+      return courseSum.exercises + partData.exercises;
+    });
+    return totalSum + exercises;
+  });
+  console.log(total);
+
+  return (
+    <>
+      {courses}
+      {/* <Total total={total} /> */}
+    </>
+  );
 };
 
 export default App;
