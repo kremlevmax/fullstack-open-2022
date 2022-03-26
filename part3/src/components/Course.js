@@ -4,6 +4,7 @@ import Header from "./Header";
 import Content from "./Content";
 import Total from "./Total";
 
+// Separate Component
 const Course = ({ courseData, total }) => {
   return (
     <>
