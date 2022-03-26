@@ -4,10 +4,6 @@ import Course from "./components/Course";
 import Total from "./components/Total";
 
 const App = () => {
-  const courses = coursesData.map((coursesData) => (
-    <Course key={coursesData.id} coursesData={coursesData} />
-  ));
-
   const allPartsArray = coursesData.reduce((partsArray, course) => {
     course.parts.forEach((part) => {
       partsArray.push(part);
@@ -15,14 +11,25 @@ const App = () => {
     return partsArray;
   }, []);
 
-  const total = allPartsArray.reduce((totalSum, part) => {
-    return totalSum + part.exercises;
-  }, 0);
+  const total = (partsArray) =>
+    partsArray.reduce((totalSum, part) => {
+      return totalSum + part.exercises;
+    }, 0);
+
+  console.log(coursesData);
+
+  const courses = coursesData.map((coursesData) => (
+    <Course
+      key={coursesData.id}
+      courseData={coursesData}
+      total={total(coursesData.parts)}
+    />
+  ));
 
   return (
     <>
       {courses}
-      <Total total={total} />
+      <Total total={total(allPartsArray)} />
     </>
   );
 };
