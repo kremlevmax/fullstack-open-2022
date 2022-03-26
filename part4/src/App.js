@@ -4,10 +4,16 @@ import { useState } from "react";
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
 
-  const onChangeHandler = (event) => {
+  const onChangeNameHandler = (event) => {
     event.preventDefault();
     setNewName(event.target.value);
+  };
+
+  const onChangePhoneNumberHandler = (event) => {
+    event.preventDefault();
+    setNewPhoneNumber(event.target.value);
   };
 
   const onSubmitHandler = (event) => {
@@ -16,13 +22,18 @@ const App = () => {
     if (persons.some((person) => person.name === newName)) {
       alert(`${newName} is already in list`);
     } else {
-      setPersons(persons.concat({ name: newName }));
+      setPersons(
+        persons.concat({ name: newName, phoneNumber: newPhoneNumber })
+      );
     }
     setNewName("");
+    setNewPhoneNumber("");
   };
 
   const contacts = persons.map((person) => (
-    <li key={person.name}>{person.name}</li>
+    <li key={person.name}>
+      {person.name} {person.phoneNumber}
+    </li>
   ));
 
   return (
@@ -30,7 +41,11 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={onSubmitHandler}>
         <div>
-          name: <input onChange={onChangeHandler} value={newName} />
+          name: <input onChange={onChangeNameHandler} value={newName} />
+        </div>
+        <div>
+          number:{" "}
+          <input onChange={onChangePhoneNumberHandler} value={newPhoneNumber} />
         </div>
         <div>
           <button type='submit'>add</button>
