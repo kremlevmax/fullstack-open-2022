@@ -16,19 +16,15 @@ const App = () => {
       return totalSum + part.exercises;
     }, 0);
 
-  console.log(coursesData);
-
-  const courses = coursesData.map((coursesData) => (
-    <Course
-      key={coursesData.id}
-      courseData={coursesData}
-      total={total(coursesData.parts)}
-    />
-  ));
-
   return (
     <>
-      {courses}
+      {coursesData.map((coursesData) => (
+        <Course
+          key={coursesData.id}
+          courseData={coursesData}
+          total={total(coursesData.parts)}
+        />
+      ))}
       <Total total={total(allPartsArray)} />
     </>
   );
