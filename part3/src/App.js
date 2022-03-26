@@ -8,18 +8,21 @@ const App = () => {
     <Course key={coursesData.id} coursesData={coursesData} />
   ));
 
-  const total = coursesData.reduce((totalSum, course) => {
-    const exercises = course.parts.reduce((courseSum, partData) => {
-      return courseSum.exercises + partData.exercises;
+  const allPartsArray = coursesData.reduce((partsArray, course) => {
+    course.parts.forEach((part) => {
+      partsArray.push(part);
     });
-    return totalSum + exercises;
-  });
-  console.log(total);
+    return partsArray;
+  }, []);
+
+  const total = allPartsArray.reduce((totalSum, part) => {
+    return totalSum + part.exercises;
+  }, 0);
 
   return (
     <>
       {courses}
-      {/* <Total total={total} /> */}
+      <Total total={total} />
     </>
   );
 };
