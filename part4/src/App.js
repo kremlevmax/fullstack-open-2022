@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from "react";
 
+import Search from "./components/Search";
+import AddNewRecord from "./components/AddNewRecord";
+import Numbers from "./components/Numbers";
+
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
@@ -46,32 +50,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>
-          name: <input onChange={onChangeFilterHandler} />
-        </div>
-      </form>
-      <h2>Add a new record</h2>
-      <form onSubmit={onSubmitHandler}>
-        <div>
-          name: <input onChange={onChangeNameHandler} value={newName} />
-        </div>
-        <div>
-          number:{" "}
-          <input onChange={onChangePhoneNumberHandler} value={newPhoneNumber} />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ol>
-        {personsToShow.map((person) => (
-          <li key={person.name}>
-            {person.name} {person.phoneNumber}
-          </li>
-        ))}
-      </ol>
+      <Search onChangeFilterHandler={onChangeFilterHandler} />
+      <AddNewRecord
+        onSubmitHandler={onSubmitHandler}
+        onChangeNameHandler={onChangeNameHandler}
+        newName={newName}
+        onChangePhoneNumberHandler={onChangePhoneNumberHandler}
+        newPhoneNumber={newPhoneNumber}
+      />
+      <Numbers personsToShow={personsToShow} />
     </div>
   );
 };
