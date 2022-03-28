@@ -36,6 +36,8 @@ function App() {
     setListToShow([data]);
   };
 
+  console.log(listToShow);
+
   // countriesList.length !== 0
   //   ? console.log(countriesList)
   //   : console.log("Fetching Data");
