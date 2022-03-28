@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+import Search from "./components/Search";
+import CountryList from "./components/CountryList";
+
 function App() {
-  const [persons, setPersons] = useState([]);
+  const [countriesList, setCountriesList] = useState([]);
+  const [searchRequest, setSearchRequest] = useState("%");
 
   const hook = () =>
     axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response));
+      .get("https://restcountries.com/v3.1/all")
+      .then((response) => setCountriesList(response.data));
 
   useEffect(() => {
     hook();
   }, []);
 
-  persons.length !== 0 ? console.log(persons) : console.log("Fetching Data");
+  const onChangeHandler = (event) => {
+    event.preventDefault();
+    setSearchRequest(event.target.value || "$");
+  };
 
-  return <div className='App'></div>;
+  const listToShow = countriesList.filter((country) =>
+    country.name.common.toLowerCase().includes(searchRequest.toLowerCase())
+  );
+
+  // console.log(listToShow);
+
+  // countriesList.length !== 0
+  //   ? console.log(countriesList)
+  //   : console.log("Fetching Data");
+
+  return (
+    <div className='App'>
+      <Search onChangeHandler={onChangeHandler} />
+      <CountryList listToShow={listToShow} />
+    </div>
+  );
 }
 
 export default App;
