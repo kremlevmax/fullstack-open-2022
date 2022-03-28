@@ -6,7 +6,7 @@ import CountryList from "./components/CountryList";
 
 function App() {
   const [countriesList, setCountriesList] = useState([]);
-  const [searchRequest, setSearchRequest] = useState("%");
+  const [listToShow, setListToShow] = useState([]);
 
   const hook = () =>
     axios
@@ -19,14 +19,22 @@ function App() {
 
   const onChangeHandler = (event) => {
     event.preventDefault();
-    setSearchRequest(event.target.value || "$");
+    if (event.target.value.length > 0) {
+      setListToShow(
+        countriesList.filter((country) =>
+          country.name.common
+            .toLowerCase()
+            .includes(event.target.value.toLowerCase())
+        )
+      );
+    } else {
+      setListToShow([]);
+    }
   };
 
-  const listToShow = countriesList.filter((country) =>
-    country.name.common.toLowerCase().includes(searchRequest.toLowerCase())
-  );
-
-  // console.log(listToShow);
+  const showInfoHandler = (data) => {
+    setListToShow([data]);
+  };
 
   // countriesList.length !== 0
   //   ? console.log(countriesList)
@@ -35,7 +43,7 @@ function App() {
   return (
     <div className='App'>
       <Search onChangeHandler={onChangeHandler} />
-      <CountryList listToShow={listToShow} />
+      <CountryList listToShow={listToShow} showInfoHandler={showInfoHandler} />
     </div>
   );
 }
