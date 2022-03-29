@@ -8,22 +8,21 @@ import numbersService from "./services/numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [entry, setEntry] = useState({ name: "", phoneNumber: "" });
   const [filterString, setFilterString] = useState("");
 
-  const person = { name: newName, phoneNumber: newPhoneNumber };
+  const person = { name: entry.name, phoneNumber: entry.phoneNumber };
 
   useEffect(() => {
     numbersService.getAll().then((response) => setPersons(response));
   }, [persons]);
 
   const onChangeNameHandler = (event) => {
-    setNewName(event.target.value);
+    setEntry({ ...entry, name: event.target.value });
   };
 
   const onChangePhoneNumberHandler = (event) => {
-    setNewPhoneNumber(event.target.value);
+    setEntry({ ...entry, phoneNumber: event.target.value });
   };
 
   const onChangeFilterHandler = (event) => {
@@ -32,15 +31,14 @@ const App = () => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already in list`);
+    if (persons.some((person) => person.name === entry.phoneNumber)) {
+      alert(`${entry.phoneNumber} is already in list`);
     } else {
       numbersService
         .createEntry(person)
         .then((response) => setPersons(persons.concat(response)));
     }
-    setNewName("");
-    setNewPhoneNumber("");
+    setEntry({ name: "", phoneNumber: "" });
   };
 
   const personsToShow =
@@ -57,7 +55,6 @@ const App = () => {
       <AddNewRecord
         onSubmitHandler={onSubmitHandler}
         onChangeNameHandler={onChangeNameHandler}
-        newPhoneNumber={newPhoneNumber}
         onChangePhoneNumberHandler={onChangePhoneNumberHandler}
         person={person}
       />

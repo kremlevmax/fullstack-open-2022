@@ -13,3 +13,5 @@ const createEntry = (entry) => {
 };
 
 export default { getAll, createEntry };
+
+// Service Module
