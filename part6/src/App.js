@@ -1,28 +1,32 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Search from "./components/Search";
 import AddNewRecord from "./components/AddNewRecord";
 import Numbers from "./components/Numbers";
+import numbersService from "./services/numbers";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [filterString, setFilterString] = useState("");
 
+  const person = { name: newName, phoneNumber: newPhoneNumber };
+
+  useEffect(() => {
+    numbersService.getAll().then((response) => setPersons(response));
+  }, [persons]);
+
   const onChangeNameHandler = (event) => {
-    event.preventDefault();
     setNewName(event.target.value);
   };
 
   const onChangePhoneNumberHandler = (event) => {
-    event.preventDefault();
     setNewPhoneNumber(event.target.value);
   };
 
   const onChangeFilterHandler = (event) => {
-    event.preventDefault();
     setFilterString(event.target.value);
   };
 
@@ -31,9 +35,9 @@ const App = () => {
     if (persons.some((person) => person.name === newName)) {
       alert(`${newName} is already in list`);
     } else {
-      setPersons(
-        persons.concat({ name: newName, phoneNumber: newPhoneNumber })
-      );
+      numbersService
+        .createEntry(person)
+        .then((response) => setPersons(persons.concat(response)));
     }
     setNewName("");
     setNewPhoneNumber("");
@@ -53,9 +57,9 @@ const App = () => {
       <AddNewRecord
         onSubmitHandler={onSubmitHandler}
         onChangeNameHandler={onChangeNameHandler}
-        newName={newName}
-        onChangePhoneNumberHandler={onChangePhoneNumberHandler}
         newPhoneNumber={newPhoneNumber}
+        onChangePhoneNumberHandler={onChangePhoneNumberHandler}
+        person={person}
       />
       <Numbers personsToShow={personsToShow} />
     </div>
