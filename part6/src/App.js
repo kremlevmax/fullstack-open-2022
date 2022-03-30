@@ -8,7 +8,7 @@ import numbersService from "./services/numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [entry, setEntry] = useState({ name: "", phoneNumber: "" });
+  const [entry, setEntry] = useState({ name: "", phoneNumber: "", id: "" });
   const [filterString, setFilterString] = useState("");
 
   const person = { name: entry.name, phoneNumber: entry.phoneNumber };
@@ -34,11 +34,16 @@ const App = () => {
     if (persons.some((person) => person.name === entry.phoneNumber)) {
       alert(`${entry.phoneNumber} is already in list`);
     } else {
-      numbersService
-        .createEntry(person)
-        .then((response) => setPersons(persons.concat(response)));
+      numbersService.createEntry(person).then((response) => {
+        setPersons(persons.concat(response));
+      });
     }
-    setEntry({ name: "", phoneNumber: "" });
+    setEntry({ name: "", phoneNumber: "", id: "" });
+  };
+
+  const onDeleteHandler = (id) => {
+    // event.preventDefault();
+    numbersService.deleteEntry(id);
   };
 
   const personsToShow =
@@ -58,7 +63,10 @@ const App = () => {
         onChangePhoneNumberHandler={onChangePhoneNumberHandler}
         person={person}
       />
-      <Numbers personsToShow={personsToShow} />
+      <Numbers
+        personsToShow={personsToShow}
+        onDeleteHandler={onDeleteHandler}
+      />
     </div>
   );
 };

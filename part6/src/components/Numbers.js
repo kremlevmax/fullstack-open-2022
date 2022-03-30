@@ -1,6 +1,6 @@
 import React from "react";
 
-const Numbers = ({ personsToShow }) => {
+const Numbers = ({ personsToShow, onDeleteHandler }) => {
   return (
     <>
       <h2>Numbers</h2>
@@ -8,6 +8,8 @@ const Numbers = ({ personsToShow }) => {
         {personsToShow.map((person) => (
           <li key={person.name}>
             {person.name} {person.phoneNumber}
+            {console.log(person)}
+            <button onClick={() => onDeleteHandler(person.id)}>Delete</button>
           </li>
         ))}
       </ol>
