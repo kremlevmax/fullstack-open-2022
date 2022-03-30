@@ -4,14 +4,15 @@ import { useState, useEffect } from "react";
 import Search from "./components/Search";
 import AddNewRecord from "./components/AddNewRecord";
 import Numbers from "./components/Numbers";
+import Notification from "./components/Notification";
+
 import numbersService from "./services/numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [entry, setEntry] = useState({ name: "", phoneNumber: "", id: "" });
   const [filterString, setFilterString] = useState("");
-
-  // const person = { name: entry.name, phoneNumber: entry.phoneNumber };
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   useEffect(() => {
     numbersService.getAll().then((response) => setPersons(response));
@@ -48,6 +49,12 @@ const App = () => {
       numbersService.createEntry(entry).then((response) => {
         setPersons(persons.concat(response));
       });
+
+      //Notification appear and dissappear
+      setNotificationMessage(`${entry.name} was added to the list`);
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
     }
     setEntry({ name: "", phoneNumber: "", id: "" });
   };
@@ -69,6 +76,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Search onChangeFilterHandler={onChangeFilterHandler} />
+      <Notification notificationMessage={notificationMessage} />
       <AddNewRecord
         onSubmitHandler={onSubmitHandler}
         onChangeNameHandler={onChangeNameHandler}
