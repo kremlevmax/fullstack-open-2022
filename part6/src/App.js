@@ -11,7 +11,7 @@ const App = () => {
   const [entry, setEntry] = useState({ name: "", phoneNumber: "", id: "" });
   const [filterString, setFilterString] = useState("");
 
-  const person = { name: entry.name, phoneNumber: entry.phoneNumber };
+  // const person = { name: entry.name, phoneNumber: entry.phoneNumber };
 
   useEffect(() => {
     numbersService.getAll().then((response) => setPersons(response));
@@ -31,10 +31,21 @@ const App = () => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    if (persons.some((person) => person.name === entry.phoneNumber)) {
-      alert(`${entry.phoneNumber} is already in list`);
+    if (persons.some((person) => person.name === entry.name)) {
+      const duplicateIndex = persons.find(
+        (person) => person.name === entry.name
+      ).id;
+      const personsArray = persons.map((person) => {
+        if (person.name === entry.name) {
+          person.phoneNumber = entry.phoneNumber;
+        }
+        return person;
+      });
+
+      setPersons(personsArray);
+      numbersService.updateEntry(duplicateIndex, entry);
     } else {
-      numbersService.createEntry(person).then((response) => {
+      numbersService.createEntry(entry).then((response) => {
         setPersons(persons.concat(response));
       });
     }
@@ -62,7 +73,7 @@ const App = () => {
         onSubmitHandler={onSubmitHandler}
         onChangeNameHandler={onChangeNameHandler}
         onChangePhoneNumberHandler={onChangePhoneNumberHandler}
-        person={person}
+        person={entry}
       />
       <Numbers
         personsToShow={personsToShow}

@@ -18,11 +18,12 @@ const deleteEntry = (id) => {
   }
 };
 
-const updateEntry = () => {
+const updateEntry = (id, entry) => {
   if (window.confirm("Entry already exists. Do you want to update it?")) {
+    axios.put(baseURL.concat(`/${id}`), entry);
   }
 };
 
-export default { getAll, createEntry, deleteEntry };
+export default { getAll, createEntry, deleteEntry, updateEntry };
 
 // Service Module
