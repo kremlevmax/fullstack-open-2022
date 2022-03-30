@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     numbersService.getAll().then((response) => setPersons(response));
-  }, [persons]);
+  }, [persons.length]);
 
   const onChangeNameHandler = (event) => {
     setEntry({ ...entry, name: event.target.value });
@@ -42,8 +42,9 @@ const App = () => {
   };
 
   const onDeleteHandler = (id) => {
-    // event.preventDefault();
     numbersService.deleteEntry(id);
+    const personsArray = persons;
+    setPersons(personsArray.filter((item) => item.id === id));
   };
 
   const personsToShow =

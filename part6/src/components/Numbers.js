@@ -8,7 +8,6 @@ const Numbers = ({ personsToShow, onDeleteHandler }) => {
         {personsToShow.map((person) => (
           <li key={person.name}>
             {person.name} {person.phoneNumber}
-            {console.log(person)}
             <button onClick={() => onDeleteHandler(person.id)}>Delete</button>
           </li>
         ))}
