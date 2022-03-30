@@ -44,7 +44,7 @@ const App = () => {
   const onDeleteHandler = (id) => {
     numbersService.deleteEntry(id);
     const personsArray = persons;
-    setPersons(personsArray.filter((item) => item.id === id));
+    setPersons(personsArray.filter((item) => item.id !== id));
   };
 
   const personsToShow =

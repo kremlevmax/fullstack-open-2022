@@ -14,8 +14,12 @@ const createEntry = (entry) => {
 
 const deleteEntry = (id) => {
   if (window.confirm("Do you want to delete this entry?")) {
-    const request = axios.delete(baseURL.concat(`/${id}`));
-    return request;
+    axios.delete(baseURL.concat(`/${id}`));
+  }
+};
+
+const updateEntry = () => {
+  if (window.confirm("Entry already exists. Do you want to update it?")) {
   }
 };
 
