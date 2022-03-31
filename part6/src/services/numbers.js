@@ -20,7 +20,9 @@ const deleteEntry = (id) => {
 
 const updateEntry = (id, entry) => {
   if (window.confirm("Entry already exists. Do you want to update it?")) {
-    axios.put(baseURL.concat(`/${id}`), entry);
+    return axios
+      .put(baseURL.concat(`/${id}`), entry)
+      .then((response) => response.data);
   }
 };
 

@@ -1,9 +1,17 @@
 .notification-block {
   margin-top: 20px;
-  border: 3px solid rgb(3, 105, 3);
   display: inline-block;
   padding: 10px;
+}
+
+.green {
+  border: 3px solid rgb(3, 105, 3);
   background-color: rgb(197, 253, 197);
+}
+
+.red {
+  border: 3px solid rgb(124, 2, 2);
+  background-color: rgb(253, 197, 197);
 }
 
 .notification-block__text {

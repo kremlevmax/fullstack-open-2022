@@ -12,7 +12,7 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [entry, setEntry] = useState({ name: "", phoneNumber: "", id: "" });
   const [filterString, setFilterString] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     numbersService.getAll().then((response) => setPersons(response));
@@ -32,28 +32,43 @@ const App = () => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
+
     if (persons.some((person) => person.name === entry.name)) {
       const duplicateIndex = persons.find(
         (person) => person.name === entry.name
       ).id;
-      const personsArray = persons.map((person) => {
-        if (person.name === entry.name) {
-          person.phoneNumber = entry.phoneNumber;
-        }
-        return person;
-      });
 
-      setPersons(personsArray);
-      numbersService.updateEntry(duplicateIndex, entry);
+      numbersService
+        .updateEntry(duplicateIndex, entry)
+        .then((returnedPerson) => {
+          setPersons(
+            persons.map((person) =>
+              person.id !== duplicateIndex ? person : returnedPerson
+            )
+          );
+        })
+        .catch((error) => {
+          setNotification({
+            message: `Sorry, ${entry.name} didn't exist on server!`,
+            color: "red",
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+          setPersons(persons.filter((person) => person.id !== duplicateIndex));
+        });
     } else {
       numbersService.createEntry(entry).then((response) => {
         setPersons(persons.concat(response));
       });
 
       //Notification appear and dissappear
-      setNotificationMessage(`${entry.name} was added to the list`);
+      setNotification({
+        message: `${entry.name} was added to the list`,
+        color: "green",
+      });
       setTimeout(() => {
-        setNotificationMessage(null);
+        setNotification(null);
       }, 5000);
     }
     setEntry({ name: "", phoneNumber: "", id: "" });
@@ -76,7 +91,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Search onChangeFilterHandler={onChangeFilterHandler} />
-      <Notification notificationMessage={notificationMessage} />
+      <Notification notification={notification} />
       <AddNewRecord
         onSubmitHandler={onSubmitHandler}
         onChangeNameHandler={onChangeNameHandler}
