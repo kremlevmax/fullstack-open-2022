@@ -1,6 +1,7 @@
 const { request, response } = require("express");
 const express = require("express");
 const app = express();
+const PORT = 3001;
 
 let persons = [
   {
@@ -29,7 +30,13 @@ app.get("/api/persons", (request, response) => {
   response.json(persons);
 });
 
-const PORT = 3001;
+app.get("/info", (request, response) => {
+  const date = new Date();
+  response.send(
+    `Phonebook has information of ${persons.length} people. <br> ${date}`
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
