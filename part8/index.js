@@ -1,7 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const cors = require("cors");
 
+app.use(cors());
 app.use(express.json());
 
 morgan.token("data", function (req, res, param) {
@@ -12,7 +14,7 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :data")
 );
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 let persons = [
   {
