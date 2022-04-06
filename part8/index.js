@@ -7,6 +7,8 @@ app.use(express.static("build"));
 app.use(cors());
 app.use(express.json());
 
+//mongodb+srv://kremlevmax1989:<password>@cluster0.mipra.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
 morgan.token("data", function (req, res, param) {
   return JSON.stringify(req.body);
 });
