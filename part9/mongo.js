@@ -9,7 +9,7 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2];
 
-const url = `mongodb+srv://testappbase:<password>@cluster0.dtlpm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const url = `mongodb+srv://testappbase:${password}@cluster0.dtlpm.mongodb.net/noteApp?retryWrites=true&w=majority`;
 
 mongoose.connect(url);
 
@@ -29,5 +29,12 @@ const note = new Note({
 
 note.save().then((result) => {
   console.log("note saved!");
+  mongoose.connection.close();
+});
+
+Note.find({}).then((result) => {
+  result.forEach((note) => {
+    console.log(note);
+  });
   mongoose.connection.close();
 });
