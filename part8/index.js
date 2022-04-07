@@ -7,7 +7,26 @@ app.use(express.static("build"));
 app.use(cors());
 app.use(express.json());
 
-//mongodb+srv://kremlevmax1989:<password>@cluster0.mipra.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+const mongoose = require("mongoose");
+
+const url = `mongodb+srv://kremlevmax1989:IDDQDidkfaidclip123@cluster0.bsmhg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
+mongoose.connect(url);
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+});
+
+personSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
+
+const Person = mongoose.model("Person", personSchema);
 
 morgan.token("data", function (req, res, param) {
   return JSON.stringify(req.body);
@@ -19,29 +38,6 @@ app.use(
 
 const PORT = process.env.PORT || 3001;
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
-
 const generateId = () => {
   const maxId =
     persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
@@ -49,7 +45,9 @@ const generateId = () => {
 };
 
 app.get("/api/persons", (request, response) => {
-  response.json(persons);
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
 });
 
 app.get("/info", (request, response) => {
