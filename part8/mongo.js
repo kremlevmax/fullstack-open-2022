@@ -8,7 +8,6 @@ if (process.argv.length < 3) {
 }
 
 const password = process.argv[2];
-
 const url = `mongodb+srv://kremlevmax1989:${password}@cluster0.bsmhg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 mongoose.connect(url);
