@@ -17,12 +17,6 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :data")
 );
 
-const generateId = () => {
-  const maxId =
-    persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
-  return maxId + 1;
-};
-
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
     response.json(persons);
@@ -39,9 +33,8 @@ app.get("/info", (request, response) => {
 });
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
   Person.find({}).then((persons) => {
-    const person = persons[id];
+    const person = persons.find((person) => (person.id = request.params.id));
     if (person) {
       response.json(person);
     } else {
@@ -51,9 +44,9 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  response.status(204).end();
+  Person.findByIdAndDelete(request.params.id).then((result) =>
+    response.status(204).end()
+  );
 });
 
 app.post("/api/persons/", (request, response) => {
