@@ -3,7 +3,6 @@ const morgan = require("morgan");
 const app = express();
 const cors = require("cors");
 const Person = require("./models/person");
-const person = require("./models/person");
 const PORT = process.env.PORT || 3001;
 
 app.use(express.static("build"));
@@ -20,6 +19,7 @@ app.use(
 
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
+    console.log(persons);
     response.json(persons);
   });
 });
@@ -51,13 +51,16 @@ app.delete("/api/persons/:id", (request, response) => {
   );
 });
 
-app.post("/api/persons/", (request, response) => {
+app.post("/api/persons/", (request, response, next) => {
   const body = request.body;
   if (!body.name) {
     return response.status(400).json({ error: "content missing" });
   }
-  const person = new Person({ name: body.name, number: body.number });
-  person.save().then((savedPersonEntry) => response.json(savedPersonEntry));
+  const person = new Person({ name: body.name, phoneNumber: body.phoneNumber });
+  person
+    .save()
+    .then((savedPersonEntry) => response.json(savedPersonEntry))
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
@@ -69,6 +72,8 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message);
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" }).end();
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
   }
 };
 app.use(errorHandler);
