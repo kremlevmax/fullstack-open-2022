@@ -58,20 +58,29 @@ const App = () => {
           setPersons(persons.filter((person) => person.id !== duplicateIndex));
         });
     } else {
-      numbersService.createEntry(entry).then((response) => {
-        setPersons(persons.concat(response));
-      });
-
-      //Notification appear and dissappear
-      setNotification({
-        message: `${entry.name} was added to the list`,
-        color: "green",
-      });
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
+      numbersService
+        .createEntry(entry)
+        .then((response) => {
+          setPersons(persons.concat(response));
+          setNotification({
+            message: `${entry.name} was added to the list`,
+            color: "green",
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+          setEntry({ name: "", phoneNumber: "", id: "" });
+        })
+        .catch((error) => {
+          setNotification({
+            message: `Sorry! Name or number is too short`,
+            color: "red",
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        });
     }
-    setEntry({ name: "", phoneNumber: "", id: "" });
   };
 
   const onDeleteHandler = (id) => {
