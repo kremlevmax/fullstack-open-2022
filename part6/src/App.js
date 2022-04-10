@@ -45,11 +45,18 @@ const App = () => {
               person.id !== duplicateIndex ? person : returnedPerson
             )
           );
+          setNotification({
+            message: `${entry.name}'s phone number was changed to ${entry.phoneNumber}`,
+            color: "green",
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
           setEntry({ name: "", phoneNumber: "", id: "" });
         })
         .catch((error) => {
           setNotification({
-            message: `Sorry, ${entry.name} didn't exist on server!`,
+            message: `Sorry, phone number has to have 2 or 3 digits before "-"!`,
             color: "red",
           });
           setTimeout(() => {
@@ -72,10 +79,17 @@ const App = () => {
           setEntry({ name: "", phoneNumber: "", id: "" });
         })
         .catch((error) => {
-          setNotification({
-            message: `${error.message}`,
-            color: "red",
-          });
+          if (entry.name.length < 5) {
+            setNotification({
+              message: `Entry name has to be at least 5 letters long`,
+              color: "red",
+            });
+          } else {
+            setNotification({
+              message: `Sorry, phone number has to have 2 or 3 digits before "-"!`,
+              color: "red",
+            });
+          }
           setTimeout(() => {
             setNotification(null);
           }, 5000);
@@ -116,3 +130,5 @@ const App = () => {
 };
 
 export default App;
+
+///CHeck check
