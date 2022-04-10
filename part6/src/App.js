@@ -42,7 +42,7 @@ const App = () => {
         .then((returnedPerson) => {
           setPersons(
             persons.map((person) =>
-              person.id !== duplicateIndex ? person : returnedPerson
+              person.id !== duplicateIndex ? person : entry
             )
           );
         })
