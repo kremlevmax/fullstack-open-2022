@@ -22,6 +22,10 @@ const personSchema = new mongoose.Schema({
     type: String,
     minlength: 9,
     required: true,
+    validate: {
+      validator: (value) => /\d{2,3}-\d{4,}/.test(value),
+      message: (value) => "Wrong phone format",
+    },
   },
 });
 

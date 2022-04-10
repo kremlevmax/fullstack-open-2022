@@ -32,7 +32,6 @@ const App = () => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-
     if (persons.some((person) => person.name === entry.name)) {
       const duplicateIndex = persons.find(
         (person) => person.name === entry.name
@@ -73,7 +72,7 @@ const App = () => {
         })
         .catch((error) => {
           setNotification({
-            message: `Sorry! Name or number is too short`,
+            message: `${error.message}`,
             color: "red",
           });
           setTimeout(() => {
