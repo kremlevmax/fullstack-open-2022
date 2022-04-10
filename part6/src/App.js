@@ -42,9 +42,10 @@ const App = () => {
         .then((returnedPerson) => {
           setPersons(
             persons.map((person) =>
-              person.id !== duplicateIndex ? person : entry
+              person.id !== duplicateIndex ? person : returnedPerson
             )
           );
+          setEntry({ name: "", phoneNumber: "", id: "" });
         })
         .catch((error) => {
           setNotification({
