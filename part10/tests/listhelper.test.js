@@ -93,6 +93,10 @@ test("Most liked array", () => {
   expect(listHelper.favoriteBlog(blogs)).toStrictEqual(winner);
 });
 
-test("Blogs per likes", () => {
+test("Most productive author", () => {
   expect(listHelper.mostBlogs(blogs)).toBe("Robert C. Martin");
+});
+
+test("Most favorite author", () => {
+  expect(listHelper.mostLikes(blogs)).toBe("Michael Chan");
 });

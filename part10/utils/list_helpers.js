@@ -28,9 +28,22 @@ const mostBlogs = (array) => {
   return winner[0];
 };
 
+const mostLikes = (array) => {
+  const authorsAndLikesArray = _(array)
+    .groupBy("author")
+    .map((objs, key) => ({
+      author: key,
+      totalLikes: _.sumBy(objs, "likes"),
+    }))
+    .value();
+  const sorted = _.sortBy(authorsAndLikesArray, "totalLikes").reverse();
+  return sorted[0].author;
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
