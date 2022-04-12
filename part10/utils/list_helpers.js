@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 const dummy = (blogs) => {
   return 1;
 };
@@ -16,12 +18,19 @@ const favoriteBlog = (array) => {
     result = result < arrayItem.likes ? arrayItem.likes : result;
   });
   const winner = array.find((arrayItem) => arrayItem.likes === result);
-  console.log(winner);
   return winner;
+};
+
+const mostBlogs = (array) => {
+  const authorsObject = _.countBy(array, "author");
+  const authorsPairs = _.sortBy(_.toPairs(authorsObject)).reverse();
+  const winner = authorsPairs[0];
+  return winner[0];
 };
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };

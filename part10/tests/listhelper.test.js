@@ -17,6 +17,22 @@ const blogs = [
     __v: 0,
   },
   {
+    _id: "5a422a851b34a676234d17f7",
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+    __v: 0,
+  },
+  {
+    _id: "5a4222851b34a676234d17f7",
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+    __v: 0,
+  },
+  {
     _id: "5a422aa71b54a676234d17f8",
     title: "Go To Statement Considered Harmful",
     author: "Edsger W. Dijkstra",
@@ -61,7 +77,7 @@ const blogs = [
 describe("total likes", () => {
   test("when list has only one blog, equals the likes of that", () => {
     const result = listHelper.totalLikes(blogs);
-    expect(result).toBe(36);
+    expect(result).toBe(50);
   });
 });
 
@@ -75,4 +91,8 @@ test("Most liked array", () => {
     __v: 0,
   };
   expect(listHelper.favoriteBlog(blogs)).toStrictEqual(winner);
+});
+
+test("Blogs per likes", () => {
+  expect(listHelper.mostBlogs(blogs)).toBe("Robert C. Martin");
 });
