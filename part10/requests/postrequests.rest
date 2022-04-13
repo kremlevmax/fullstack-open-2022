@@ -3,8 +3,8 @@ Content-Type: application/json
 
 {
   "title": "Makeup Blog",
-  "author": "Max Kremlev",
-  "url": "www.makeupwithmax.com",
-  "likes": "666"
+  "author": "Max Factor",
+  "url": "www.maxfactor.com",
+  "likes": "777"
 }
   
