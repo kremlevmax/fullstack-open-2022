@@ -2,22 +2,9 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
-const Blog = require("../models/blog");
+const { initialBlogs, nonExistentID, blogsInDB } = require("./test_helper");
 
-const initialBlogs = [
-  {
-    title: "Makeup Blog",
-    author: "Max Factor",
-    url: "www.maxfactor.com",
-    likes: "777",
-  },
-  {
-    title: "Drag Blog",
-    author: "Max Queen",
-    url: "www.maxqueen.com",
-    likes: "666",
-  },
-];
+const Blog = require("../models/blog");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -41,24 +28,20 @@ test("a valid note can be added", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
-
-  const titles = response.body.map((r) => r.title);
-
-  expect(response.body).toHaveLength(initialBlogs.length + 1);
-  expect(titles).toContain("Suoer new boring blog");
+  const blogs = await blogsInDB();
+  const blogsTitles = blogs.map((blog) => blog.title);
+  expect(blogs).toHaveLength(initialBlogs.length + 1);
+  expect(blogsTitles).toContain("Suoer new boring blog");
 });
 
 test("note without content is not added", async () => {
   const newBlog = {
-    title: "True Metal Blog",
+    title: "True Metal",
   };
 
   await api.post("/api/blogs").send(newBlog).expect(400);
-
-  const response = await api.get("/api/blogs");
-
-  expect(response.body).toHaveLength(initialBlogs.length);
+  const blogs = await blogsInDB();
+  expect(blogs).toHaveLength(initialBlogs.length);
 });
 
 test("notes are returned as json", async () => {
@@ -69,14 +52,13 @@ test("notes are returned as json", async () => {
 });
 
 test("there are two notes", async () => {
-  const response = await api.get("/api/blogs");
-
-  expect(response.body).toHaveLength(initialBlogs.length);
+  const blogs = await blogsInDB();
+  expect(blogs).toHaveLength(initialBlogs.length);
 });
 
 test("the first note is about HTTP methods", async () => {
-  const response = await api.get("/api/blogs");
-  const authors = response.body.map((response) => response.author);
+  const blogs = await blogsInDB();
+  const authors = blogs.map((blog) => blog.author);
   expect(authors).toContain("Max Queen");
 });
 
