@@ -27,6 +27,40 @@ beforeEach(async () => {
   await blogObject.save();
 });
 
+test("a valid note can be added", async () => {
+  const newBlog = {
+    title: "Suoer new boring blog",
+    author: "Max Blabling",
+    url: "www.maxblalbabla.com",
+    likes: "1",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/blogs");
+
+  const titles = response.body.map((r) => r.title);
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1);
+  expect(titles).toContain("Suoer new boring blog");
+});
+
+test("note without content is not added", async () => {
+  const newBlog = {
+    title: "True Metal Blog",
+  };
+
+  await api.post("/api/blogs").send(newBlog).expect(400);
+
+  const response = await api.get("/api/blogs");
+
+  expect(response.body).toHaveLength(initialBlogs.length);
+});
+
 test("notes are returned as json", async () => {
   await api
     .get("/api/blogs")
