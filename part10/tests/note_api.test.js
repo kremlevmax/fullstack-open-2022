@@ -34,9 +34,11 @@ test("a valid note can be added", async () => {
   expect(blogsTitles).toContain("Suoer new boring blog");
 });
 
-test("note without content is not added", async () => {
+test("blog without url is not added", async () => {
   const newBlog = {
     title: "True Metal",
+    author: "Max Cavalera",
+    likes: "666",
   };
 
   await api.post("/api/blogs").send(newBlog).expect(400);
