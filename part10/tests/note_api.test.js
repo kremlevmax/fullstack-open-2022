@@ -14,7 +14,19 @@ beforeEach(async () => {
   await blogObject.save();
 });
 
-test("a valid note can be added", async () => {
+test("Specific blog can be viewed", async () => {
+  const blogsFromDB = await blogsInDB();
+  const firstBlog = blogsFromDB[0];
+  const result = await api
+    .get(`/api/blogs/${firstBlog._id}`)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  const firstBlogData = JSON.parse(JSON.stringify(firstBlog));
+  expect(result.body).toEqual(firstBlogData);
+});
+
+test("A valid blog can be added", async () => {
   const newBlog = {
     title: "Suoer new boring blog",
     author: "Max Blabling",
@@ -34,7 +46,7 @@ test("a valid note can be added", async () => {
   expect(blogsTitles).toContain("Suoer new boring blog");
 });
 
-test("blog without url is not added", async () => {
+test("Blog without requiered field can't be added", async () => {
   const newBlog = {
     title: "True Metal",
     author: "Max Cavalera",
@@ -46,16 +58,29 @@ test("blog without url is not added", async () => {
   expect(blogs).toHaveLength(initialBlogs.length);
 });
 
-test("notes are returned as json", async () => {
+test("Blogs list is returned as json", async () => {
   await api
     .get("/api/blogs")
     .expect(200)
     .expect("Content-Type", /application\/json/);
 });
 
-test("there are two notes", async () => {
-  const blogs = await blogsInDB();
-  expect(blogs).toHaveLength(initialBlogs.length);
+test("There two blogs in DB", async () => {
+  const blogs = await api
+    .get("/api/blogs")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+  expect(blogs.body).toHaveLength(initialBlogs.length);
+});
+
+test("A blog can be deleted", async () => {
+  const blogsFromDB = await blogsInDB();
+  const firstBlog = blogsFromDB[0];
+
+  await api.delete(`/api/blogs/${firstBlog._id}`).expect(204);
+
+  const newBlogsRequest = await blogsInDB();
+  expect(newBlogsRequest).toHaveLength(initialBlogs.length - 1);
 });
 
 test("the first note is about HTTP methods", async () => {
