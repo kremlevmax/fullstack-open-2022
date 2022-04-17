@@ -64,6 +64,22 @@ test("Test POST request", async () => {
   expect(blogsList.body).toHaveLength(initialBlogs.length + 1);
 });
 
+test("If likes are missing equal to zero", async () => {
+  const blog = new Blog({
+    title: "No one like this blog",
+    author: "Max Factor",
+    url: "www.oyvey.com",
+  });
+  blog.save();
+
+  const blogList = await api
+    .get("/api/blogs/")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+  console.log(blogList.body[blogList.body.length - 1].likes);
+  expect(blogList.body[blogList.body.length - 1].likes).toEqual(0);
+});
+
 test("A valid blog can be added", async () => {
   const newBlog = {
     title: "Suoer new boring blog",

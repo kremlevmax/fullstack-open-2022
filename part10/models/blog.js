@@ -8,7 +8,7 @@ const blogSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  likes: Number,
+  likes: { type: Number, default: 0 },
 });
 
 blogSchema.set("toJSON", {
