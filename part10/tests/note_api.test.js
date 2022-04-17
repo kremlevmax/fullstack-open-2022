@@ -17,8 +17,18 @@ beforeEach(async () => {
 test("All blogs are returned", async () => {
   const allBlogs = await blogsInDB();
   const allBlogsTest = await api.get("/api/blogs").expect(200);
-  console.log(allBlogsTest.body);
   expect(allBlogs).toHaveLength(allBlogsTest.body.length);
+});
+
+test("id and _id are the same", async () => {
+  const allBlogs = await blogsInDB();
+  const allBlogsTest = await api
+    .get("/api/blogs")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  expect(allBlogs[0].id).toBeDefined();
+  expect(allBlogs[0].id).toEqual(allBlogsTest.body[0]._id);
 });
 
 test("Specific blog can be viewed", async () => {
