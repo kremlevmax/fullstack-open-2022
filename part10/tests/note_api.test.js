@@ -14,6 +14,13 @@ beforeEach(async () => {
   await blogObject.save();
 });
 
+test("All blogs are returned", async () => {
+  const allBlogs = await blogsInDB();
+  const allBlogsTest = await api.get("/api/blogs").expect(200);
+
+  expect(allBlogs).toHaveLength(allBlogsTest.body.length);
+});
+
 test("Specific blog can be viewed", async () => {
   const blogsFromDB = await blogsInDB();
   const firstBlog = blogsFromDB[0];
