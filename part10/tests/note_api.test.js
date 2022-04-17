@@ -76,7 +76,6 @@ test("If likes are missing equal to zero", async () => {
     .get("/api/blogs/")
     .expect(200)
     .expect("Content-Type", /application\/json/);
-  console.log(blogList.body[blogList.body.length - 1].likes);
   expect(blogList.body[blogList.body.length - 1].likes).toEqual(0);
 });
 
@@ -98,6 +97,30 @@ test("A valid blog can be added", async () => {
   const blogsTitles = blogs.map((blog) => blog.title);
   expect(blogs).toHaveLength(initialBlogs.length + 1);
   expect(blogsTitles).toContain("Suoer new boring blog");
+});
+
+test("Blog can't be added without name and URL", async () => {
+  const noNameBlog = {
+    author: "Max Blabling",
+    url: "www.maxblalbabla.com",
+    likes: "1",
+  };
+
+  const noURLBlog = {
+    title: "Suoer new boring blog",
+    author: "Max Blabling",
+    likes: "1",
+  };
+
+  const noURLNoTitleBlog = {
+    title: "Suoer new boring blog",
+    author: "Max Blabling",
+    likes: "1",
+  };
+
+  await api.post("/api/blogs/").send(noNameBlog).expect(400);
+  await api.post("/api/blogs/").send(noURLBlog).expect(400);
+  await api.post("/api/blogs/").send(noURLNoTitleBlog).expect(400);
 });
 
 test("Blog without requiered field can't be added", async () => {
