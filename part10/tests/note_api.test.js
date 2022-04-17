@@ -17,7 +17,7 @@ beforeEach(async () => {
 test("All blogs are returned", async () => {
   const allBlogs = await blogsInDB();
   const allBlogsTest = await api.get("/api/blogs").expect(200);
-
+  console.log(allBlogsTest.body);
   expect(allBlogs).toHaveLength(allBlogsTest.body.length);
 });
 
@@ -25,7 +25,7 @@ test("Specific blog can be viewed", async () => {
   const blogsFromDB = await blogsInDB();
   const firstBlog = blogsFromDB[0];
   const result = await api
-    .get(`/api/blogs/${firstBlog._id}`)
+    .get(`/api/blogs/${firstBlog.id}`)
     .expect(200)
     .expect("Content-Type", /application\/json/);
 
@@ -84,7 +84,7 @@ test("A blog can be deleted", async () => {
   const blogsFromDB = await blogsInDB();
   const firstBlog = blogsFromDB[0];
 
-  await api.delete(`/api/blogs/${firstBlog._id}`).expect(204);
+  await api.delete(`/api/blogs/${firstBlog.id}`).expect(204);
 
   const newBlogsRequest = await blogsInDB();
   expect(newBlogsRequest).toHaveLength(initialBlogs.length - 1);
