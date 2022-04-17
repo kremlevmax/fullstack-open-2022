@@ -43,6 +43,27 @@ test("Specific blog can be viewed", async () => {
   expect(result.body).toEqual(firstBlogData);
 });
 
+test("Test POST request", async () => {
+  const blog = {
+    title: "Jewish Blog",
+    author: "Max Factor",
+    url: "www.oyvey.com",
+    likes: "777",
+  };
+  await api
+    .post("/api/blogs")
+    .send(blog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsList = await api
+    .get("/api/blogs")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  expect(blogsList.body).toHaveLength(initialBlogs.length + 1);
+});
+
 test("A valid blog can be added", async () => {
   const newBlog = {
     title: "Suoer new boring blog",
