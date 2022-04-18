@@ -14,6 +14,13 @@ beforeEach(async () => {
   await blogObject.save();
 });
 
+test("Delete blog by id", async () => {
+  const allBlogs = await blogsInDB();
+  const id = allBlogs[0].id;
+
+  await api.delete(`/api/blogs/${id}`).expect(204);
+});
+
 test("All blogs are returned", async () => {
   const allBlogs = await blogsInDB();
   const allBlogsTest = await api.get("/api/blogs").expect(200);
@@ -72,11 +79,14 @@ test("If likes are missing equal to zero", async () => {
   });
   blog.save();
 
-  const blogList = await api
+  await api
     .get("/api/blogs/")
     .expect(200)
     .expect("Content-Type", /application\/json/);
-  expect(blogList.body[blogList.body.length - 1].likes).toEqual(0);
+
+  const allBlogs = await blogsInDB();
+
+  expect(allBlogs[allBlogs.length - 1].likes).toEqual(0);
 });
 
 test("A valid blog can be added", async () => {
