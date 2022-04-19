@@ -89,6 +89,17 @@ test("If likes are missing equal to zero", async () => {
   expect(allBlogs[allBlogs.length - 1].likes).toEqual(0);
 });
 
+test("Check blog's updating", async () => {
+  const allBlogs = await blogsInDB();
+  const firstBlog = allBlogs[0];
+  const updatedBlog = await api
+    .put(`/api/blogs/${firstBlog.id}`)
+    .send(firstBlog)
+    .expect(200);
+
+  expect(updatedBlog.body.likes).toEqual(firstBlog.likes + 1);
+});
+
 test("A valid blog can be added", async () => {
   const newBlog = {
     title: "Suoer new boring blog",
