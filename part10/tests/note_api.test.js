@@ -2,9 +2,42 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
-const { initialBlogs, nonExistentID, blogsInDB } = require("./test_helper");
-
+const {
+  initialBlogs,
+  nonExistentID,
+  blogsInDB,
+  usersInDB,
+} = require("./test_helper");
 const Blog = require("../models/blog");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
+
+describe("User test. Already on user in DB", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+    const passwordHash = await bcrypt.hash("testpassword", 10);
+    const user = new User({ username: "testUser", passwordHash: passwordHash });
+    await user.save();
+  });
+
+  test("Creating new user with a different name", async () => {
+    const usersInBeggining = await usersInDB();
+    const newUser = {
+      name: "Max",
+      username: "kremlevmax",
+      password: "password",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+    const usersAtEnd = await usersInDB();
+
+    expect(usersAtEnd).toHaveLength(usersInBeggining.length + 1);
+  });
+});
 
 beforeEach(async () => {
   await Blog.deleteMany({});
