@@ -2,9 +2,9 @@ POST http://localhost:3001/api/blogs/
 Content-Type: application/json
 
 {
-  "title": "Makeup Blog1",
-  "author": "Max Factor1",
-  "url": "www.maxfactor.com1",
+  "title": "Makeup2 Blog1",
+  "author": "Max2 Factor1",
+  "url": "www.max2factor.com1",
   "likes": "7771"
 }
 
@@ -15,6 +15,14 @@ DELETE http://localhost:3001/api/blogs/62567d779e71791ff995e364
 ###
 GET http://localhost:3001/api/blogs/62567d779e71791ff995e361
 
+###
 
+POST http://localhost:3001/api/users/
+Content-Type: application/json
 
+{
+ "name": "Ma",
+ "username": "kr",
+ "password": "123333" 
+}
   

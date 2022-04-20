@@ -34,7 +34,6 @@ describe("User test. Already on user in DB", () => {
       .expect(201)
       .expect("Content-Type", /application\/json/);
     const usersAtEnd = await usersInDB();
-
     expect(usersAtEnd).toHaveLength(usersInBeggining.length + 1);
   });
 });
