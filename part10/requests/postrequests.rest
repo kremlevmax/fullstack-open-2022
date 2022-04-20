@@ -2,15 +2,15 @@ POST http://localhost:3001/api/blogs/
 Content-Type: application/json
 
 {
-  "title": "Makeup2 Blog1",
-  "author": "Max2 Factor1",
-  "url": "www.max2factor.com1",
-  "likes": "7771"
+  "title": "Blog 1",
+  "author": "Max",
+  "url": "www.max.com",
+  "likes": "123"
 }
 
 ###
 
-DELETE http://localhost:3001/api/blogs/62567d779e71791ff995e364
+DELETE http://localhost:3001/api/blogs/625f80cb9fdfbdaa858455a6
 
 ###
 GET http://localhost:3001/api/blogs/62567d779e71791ff995e361
