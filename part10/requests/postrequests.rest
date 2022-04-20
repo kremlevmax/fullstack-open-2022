@@ -21,8 +21,17 @@ POST http://localhost:3001/api/users/
 Content-Type: application/json
 
 {
- "name": "Ma",
- "username": "kr",
+ "name": "Max Kremlev",
+ "username": "kremlevmax",
  "password": "123333" 
 }
   
+
+###
+POST http://localhost:3001/api/login/
+Content-Type: application/json
+
+{
+ "username": "kremlevmax",
+ "password": "123333" 
+}
