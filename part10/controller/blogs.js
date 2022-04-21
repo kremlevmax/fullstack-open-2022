@@ -4,7 +4,8 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 blogRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user");
+  console.log(request.params);
+  const blogs = await Blog.find({});
   response.json(blogs);
 });
 
@@ -24,11 +25,11 @@ blogRouter.get("/:id", async (request, response, next) => {
 
 blogRouter.delete("/:id", async (request, response, next) => {
   const id = request.params.id;
-  const idFromToken = request.token.id;
+  const user = request.user;
 
   try {
     const blog = await Blog.findById(id);
-    if (blog.user.toString() === idFromToken.toString()) {
+    if (blog && blog.user.toString() === user.id.toString()) {
       await Blog.findByIdAndRemove(id);
       response.status(204).end();
     } else {
@@ -41,7 +42,7 @@ blogRouter.delete("/:id", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   const blogData = request.body;
-  const user = await User.findById(request.token.id);
+  const user = request.user;
 
   const blog = new Blog({
     title: blogData.title,
