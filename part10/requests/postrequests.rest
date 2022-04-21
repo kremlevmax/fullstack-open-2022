@@ -1,11 +1,12 @@
 POST http://localhost:3001/api/blogs/
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNWZiMTM0OGM0Nzk1OWMzZTE1YmZjMiIsImlhdCI6MTY1MDQ0ODI0NH0.rMRIRH0o9GKQ2mjlulGSlulkHlwQC4U5fxVI3ZcCApM
 
 {
-  "title": "Blog 1",
-  "author": "Max",
-  "url": "www.max.com",
-  "likes": "123"
+  "title": "Blog 7777",
+  "author": "Max 77777",
+  "url": "www.max5111677.com",
+  "likes": "1231111"
 }
 
 ###
@@ -22,8 +23,8 @@ Content-Type: application/json
 
 {
  "name": "Max Kremlev",
- "username": "kremlevmax",
- "password": "123333" 
+ "username": "kremlevmax1",
+ "password": "1233331" 
 }
   
 
