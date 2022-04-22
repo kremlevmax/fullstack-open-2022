@@ -15,6 +15,7 @@ const bcrypt = require("bcrypt");
 describe("User test. Already on user in DB", () => {
   beforeEach(async () => {
     await User.deleteMany({});
+    await Blog.deleteMany({});
     const passwordHash = await bcrypt.hash("testpassword", 10);
     const user = new User({ username: "testUser", passwordHash: passwordHash });
     await user.save();
@@ -36,187 +37,138 @@ describe("User test. Already on user in DB", () => {
     const usersAtEnd = await usersInDB();
     expect(usersAtEnd).toHaveLength(usersInBeggining.length + 1);
   });
-});
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
-  let blogObject = new Blog(initialBlogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[1]);
-  await blogObject.save();
-});
+  test("Login in created user", async () => {
+    const loginCredentials = {
+      username: "testUser",
+      password: "testpassword",
+    };
 
-test("Delete blog by id", async () => {
-  const allBlogs = await blogsInDB();
-  const id = allBlogs[0].id;
-
-  await api.delete(`/api/blogs/${id}`).expect(204);
-});
-
-test("All blogs are returned", async () => {
-  const allBlogs = await blogsInDB();
-  const allBlogsTest = await api.get("/api/blogs").expect(200);
-  expect(allBlogs).toHaveLength(allBlogsTest.body.length);
-});
-
-test("id and _id are the same", async () => {
-  const allBlogs = await blogsInDB();
-  const allBlogsTest = await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-
-  expect(allBlogs[0].id).toBeDefined();
-  expect(allBlogs[0].id).toEqual(allBlogsTest.body[0]._id);
-});
-
-test("Specific blog can be viewed", async () => {
-  const blogsFromDB = await blogsInDB();
-  const firstBlog = blogsFromDB[0];
-  const result = await api
-    .get(`/api/blogs/${firstBlog.id}`)
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-
-  const firstBlogData = JSON.parse(JSON.stringify(firstBlog));
-  expect(result.body).toEqual(firstBlogData);
-});
-
-test("Test POST request", async () => {
-  const blog = {
-    title: "Jewish Blog",
-    author: "Max Factor",
-    url: "www.oyvey.com",
-    likes: "777",
-  };
-  await api
-    .post("/api/blogs")
-    .send(blog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
-
-  const blogsList = await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-
-  expect(blogsList.body).toHaveLength(initialBlogs.length + 1);
-});
-
-test("If likes are missing equal to zero", async () => {
-  const blog = new Blog({
-    title: "No one like this blog",
-    author: "Max Factor",
-    url: "www.oyvey.com",
+    const data = await api
+      .post("/api/login")
+      .send(loginCredentials)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
   });
-  blog.save();
 
-  await api
-    .get("/api/blogs/")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
+  test("Create a blog entry", async () => {
+    const blogsInBeggining = await blogsInDB();
+    const loginCredentials = {
+      username: "testUser",
+      password: "testpassword",
+    };
 
-  const allBlogs = await blogsInDB();
+    const data = await api.post("/api/login").send(loginCredentials);
+    const token = data.body.token;
+    const blogData = {
+      title: "Test Blog",
+      author: "Max",
+      url: "www.testurl.com",
+      likes: "111",
+    };
 
-  expect(allBlogs[allBlogs.length - 1].likes).toEqual(0);
-});
+    await api
+      .post("/api/blogs/")
+      .set("Authorization", "bearer " + token)
+      .send(blogData)
+      .expect(201);
 
-test("Check blog's updating", async () => {
-  const allBlogs = await blogsInDB();
-  const firstBlog = allBlogs[0];
-  const updatedBlog = await api
-    .put(`/api/blogs/${firstBlog.id}`)
-    .send(firstBlog)
-    .expect(200);
+    const blogsInTheEnd = await blogsInDB();
+    expect(blogsInTheEnd).toHaveLength(blogsInBeggining.length + 1);
+  });
 
-  expect(updatedBlog.body.likes).toEqual(firstBlog.likes + 1);
-});
+  test("Delete blog by id", async () => {
+    const blogsInBeggining = await blogsInDB();
+    const loginCredentials = {
+      username: "testUser",
+      password: "testpassword",
+    };
 
-test("A valid blog can be added", async () => {
-  const newBlog = {
-    title: "Suoer new boring blog",
-    author: "Max Blabling",
-    url: "www.maxblalbabla.com",
-    likes: "1",
-  };
+    const data = await api.post("/api/login").send(loginCredentials);
+    const token = data.body.token;
+    const blogData = {
+      title: "Test Blog",
+      author: "Max",
+      url: "www.testurl.com",
+      likes: "111",
+    };
 
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
+    const newData = await api
+      .post("/api/blogs/")
+      .set("Authorization", "bearer " + token)
+      .send(blogData)
+      .expect(201);
 
-  const blogs = await blogsInDB();
-  const blogsTitles = blogs.map((blog) => blog.title);
-  expect(blogs).toHaveLength(initialBlogs.length + 1);
-  expect(blogsTitles).toContain("Suoer new boring blog");
-});
+    const id = newData.body.id;
+    await api
+      .delete(`/api/blogs/${id}`)
+      .set("Authorization", "bearer " + token)
+      .expect(200);
 
-test("Blog can't be added without name and URL", async () => {
-  const noNameBlog = {
-    author: "Max Blabling",
-    url: "www.maxblalbabla.com",
-    likes: "1",
-  };
+    const blogsInTheEnd = await blogsInDB();
+    expect(blogsInTheEnd).toHaveLength(blogsInBeggining.length);
+  });
 
-  const noURLBlog = {
-    title: "Suoer new boring blog",
-    author: "Max Blabling",
-    likes: "1",
-  };
+  test("Delete blog by wrong id", async () => {
+    const blogsInBeggining = await blogsInDB();
+    const loginCredentials = {
+      username: "testUser",
+      password: "testpassword",
+    };
 
-  const noURLNoTitleBlog = {
-    title: "Suoer new boring blog",
-    author: "Max Blabling",
-    likes: "1",
-  };
+    const data = await api.post("/api/login").send(loginCredentials);
+    const token = data.body.token;
+    await api
+      .delete(`/api/blogs/testwrongid`)
+      .set("Authorization", "bearer " + token)
+      .expect(400);
 
-  await api.post("/api/blogs/").send(noNameBlog).expect(400);
-  await api.post("/api/blogs/").send(noURLBlog).expect(400);
-  await api.post("/api/blogs/").send(noURLNoTitleBlog).expect(400);
-});
+    const blogsInTheEnd = await blogsInDB();
+    expect(blogsInTheEnd).toHaveLength(blogsInBeggining.length);
+  });
 
-test("Blog without requiered field can't be added", async () => {
-  const newBlog = {
-    title: "True Metal",
-    author: "Max Cavalera",
-    likes: "666",
-  };
+  test("Delete blog wih wrong token", async () => {
+    const blogsInBeggining = await blogsInDB();
+    const loginCredentials = {
+      username: "testUser",
+      password: "testpassword",
+    };
 
-  await api.post("/api/blogs").send(newBlog).expect(400);
-  const blogs = await blogsInDB();
-  expect(blogs).toHaveLength(initialBlogs.length);
-});
+    const data = await api.post("/api/login").send(loginCredentials);
+    const rightToken = data.body.token;
+    const blogData = {
+      title: "Test Blog",
+      author: "Max",
+      url: "www.testurl.com",
+      likes: "111",
+    };
 
-test("Blogs list is returned as json", async () => {
-  await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+    const secpondLoginCredentials = {
+      username: "testUser2",
+      password: "testpassword2",
+    };
 
-test("There two blogs in DB", async () => {
-  const blogs = await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-  expect(blogs.body).toHaveLength(initialBlogs.length);
-});
+    await api.post("/api/users").send(secpondLoginCredentials).expect(201);
+    const secondUserData = await api
+      .post("/api/login")
+      .send(secpondLoginCredentials);
+    const wrongToken = secondUserData.body.token;
 
-test("A blog can be deleted", async () => {
-  const blogsFromDB = await blogsInDB();
-  const firstBlog = blogsFromDB[0];
+    const postedBlogData = await api
+      .post("/api/blogs/")
+      .set("Authorization", "bearer " + rightToken)
+      .send(blogData)
+      .expect(201);
 
-  await api.delete(`/api/blogs/${firstBlog.id}`).expect(204);
+    const id = postedBlogData.body.id;
+    await api
+      .delete(`/api/blogs/${id}`)
+      .set("Authorization", "bearer " + wrongToken)
+      .expect(401);
 
-  const newBlogsRequest = await blogsInDB();
-  expect(newBlogsRequest).toHaveLength(initialBlogs.length - 1);
-});
-
-test("the first note is about HTTP methods", async () => {
-  const blogs = await blogsInDB();
-  const authors = blogs.map((blog) => blog.author);
-  expect(authors).toContain("Max Queen");
+    const blogsInTheEnd = await blogsInDB();
+    expect(blogsInTheEnd).toHaveLength(blogsInBeggining.length + 1);
+  });
 });
 
 afterAll(() => {
