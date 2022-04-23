@@ -1,16 +1,15 @@
 import React from "react";
 
 const LoginForm = ({ props }) => {
-  console.log(props);
   return (
-    <div>
+    <form onSubmit={props.loginOnSubmitHandler}>
       <div>
         <span>Username:</span>
       </div>
       <div>
         <input
           value={props.username}
-          onChange={props.usernameOnChangeHandler}
+          onChange={({ target }) => props.setUsername(target.value)}
         ></input>
       </div>
       <div>
@@ -19,13 +18,13 @@ const LoginForm = ({ props }) => {
       <div>
         <input
           value={props.password}
-          onChange={props.passwordOnChangeHandler}
+          onChange={({ target }) => props.setPassword(target.value)}
         ></input>
       </div>
       <div>
-        <button onClick={props.enterOnClickHandler}>Enter</button>
+        <button type='submit'>Enter</button>
       </div>
-    </div>
+    </form>
   );
 };
 

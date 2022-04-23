@@ -1,47 +1,47 @@
 import Search from "./components/Search";
 import BlogList from "./components/BlogList";
 import LoginForm from "./components/LoginForm";
-import services from "./services/blogs";
+import blogServices from "./services/blogs";
+import loginServices from "./services/login";
 import { useEffect, useState } from "react";
 
 function App() {
   useEffect(() => {
-    services.getAll().then((response) => setBlogs(response.data));
+    blogServices.getAll().then((response) => setBlogs(response.data));
   }, []);
 
   const [blogs, setBlogs] = useState([]);
   const [searchRequest, setSearchRequest] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [userCredentials, setUserCredentials] = useState({});
+  const [user, setUser] = useState(null);
 
   const searchOnChangeHandler = (event) => {
     setSearchRequest(event.target.value);
   };
 
-  const usernameOnChangeHandler = (event) => {
-    setUsername(event.target.value);
+  const loginOnSubmitHandler = async (event) => {
+    event.preventDefault();
+
+    try {
+      const user = await loginServices.login({ username, password });
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const passwordOnChangeHandler = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const enterOnClickHandler = () => {
-    setUserCredentials({ username, password });
-    setUsername("");
-    setPassword("");
-  };
+  console.log(user);
 
   const loginComponentProps = {
     username,
-    usernameOnChangeHandler,
+    setUsername,
     password,
-    passwordOnChangeHandler,
-    enterOnClickHandler,
+    setPassword,
+    loginOnSubmitHandler,
   };
-
-  // console.log(JSON.stringify(userCredentials));
 
   const blogsList =
     searchRequest === ""
