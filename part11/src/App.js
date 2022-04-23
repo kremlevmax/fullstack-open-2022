@@ -1,5 +1,6 @@
 import Search from "./components/Search";
 import BlogList from "./components/BlogList";
+import LoginForm from "./components/LoginForm";
 import services from "./services/blogs";
 import { useEffect, useState } from "react";
 
@@ -10,10 +11,37 @@ function App() {
 
   const [blogs, setBlogs] = useState([]);
   const [searchRequest, setSearchRequest] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [userCredentials, setUserCredentials] = useState({});
 
-  const onChangeHandler = (event) => {
+  const searchOnChangeHandler = (event) => {
     setSearchRequest(event.target.value);
   };
+
+  const usernameOnChangeHandler = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const passwordOnChangeHandler = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const enterOnClickHandler = () => {
+    setUserCredentials({ username, password });
+    setUsername("");
+    setPassword("");
+  };
+
+  const loginComponentProps = {
+    username,
+    usernameOnChangeHandler,
+    password,
+    passwordOnChangeHandler,
+    enterOnClickHandler,
+  };
+
+  // console.log(JSON.stringify(userCredentials));
 
   const blogsList =
     searchRequest === ""
@@ -24,7 +52,8 @@ function App() {
 
   return (
     <div className='App'>
-      <Search onChangeHandler={onChangeHandler} />
+      <LoginForm props={loginComponentProps} />
+      <Search onChangeHandler={searchOnChangeHandler} />
       <BlogList blogs={blogsList} />
     </div>
   );
