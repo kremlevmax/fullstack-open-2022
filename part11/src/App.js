@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import Search from "./components/Search";
+import BlogList from "./components/BlogList";
+import services from "./services/blogs";
+import { useEffect, useState } from "react";
 
 function App() {
+  useEffect(() => {
+    services.getAll().then((response) => setBlogs(response.data));
+  }, []);
+
+  const [blogs, setBlogs] = useState([]);
+  const [searchRequest, setSearchRequest] = useState("");
+
+  const onChangeHandler = (event) => {
+    setSearchRequest(event.target.value);
+  };
+
+  const blogsList =
+    searchRequest === ""
+      ? blogs
+      : blogs.filter((blog) =>
+          blog.title.toLowerCase().includes(searchRequest.toLowerCase())
+        );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Search onChangeHandler={onChangeHandler} />
+      <BlogList blogs={blogsList} />
     </div>
   );
 }
