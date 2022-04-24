@@ -7,15 +7,24 @@ import { useEffect, useState } from "react";
 import AddNewBlog from "./components/AddNewBlog";
 
 function App() {
-  useEffect(() => {
-    blogServices.getAll().then((response) => setBlogs(response.data));
-  }, []);
-
   const [blogs, setBlogs] = useState([]);
   const [searchRequest, setSearchRequest] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    blogServices.getAll().then((response) => setBlogs(response.data));
+  }, []);
+
+  useEffect(() => {
+    const userData = window.localStorage.getItem("loggedInUser");
+    if (userData) {
+      const user = JSON.parse(userData);
+      setUser(user);
+      blogServices.setToken(user.token);
+    }
+  });
 
   const searchOnChangeHandler = (event) => {
     setSearchRequest(event.target.value);
@@ -28,6 +37,7 @@ function App() {
       const user = await loginServices.login({ username, password });
       setUser(user);
       blogServices.setToken(user.token);
+      window.localStorage.setItem("loggedInUser", JSON.stringify(user));
       setUsername("");
       setPassword("");
     } catch (error) {
