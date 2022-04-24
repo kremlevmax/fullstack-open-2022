@@ -19,7 +19,6 @@ const AddNewBlog = ({ setNotification, upadateBlogList, user }) => {
     setTitle("");
     setURL("");
     setLikes("");
-    setNotification({ message: "Error", color: "red" });
     upadateBlogList();
   };
 

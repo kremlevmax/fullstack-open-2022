@@ -1,14 +1,10 @@
 import React from "react";
-const Notification = (notification) => {
-  const showMessage = (message, color) => {
-    setTimeout(() => {
-      <div style={{ color }}>
-        <span>{message}</span>
-      </div>;
-    }, 3000);
-  };
+const Notification = ({ notification }) => {
+  console.log(notification);
   return (
-    <>{notification && showMessage(notification.message, notification.color)}</>
+    <div style={{ color: notification[1] }}>
+      <span>{notification[0]}</span>
+    </div>
   );
 };
 

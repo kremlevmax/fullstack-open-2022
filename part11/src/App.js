@@ -20,6 +20,7 @@ function App() {
   const upadateBlogList = () => {
     setUpdateBlogList((updateBlogList) => !updateBlogList);
   };
+  console.log(notification);
 
   useEffect(() => {
     const getBlogList = async () => {
@@ -38,6 +39,7 @@ function App() {
     if (userData) {
       const user = JSON.parse(userData);
       setUser(user);
+
       blogServices.setToken(user.token);
     }
   }, []);
@@ -52,11 +54,19 @@ function App() {
     try {
       const user = await loginServices.login({ username, password });
       setUser(user);
+      setNotification([`${username} is logged in`, "green"]);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
       blogServices.setToken(user.token);
       window.localStorage.setItem("loggedInUser", JSON.stringify(user));
       setUsername("");
       setPassword("");
     } catch (error) {
+      setNotification([`Wrong Password`, "red"]);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
       console.log(error);
     }
   };
@@ -82,9 +92,7 @@ function App() {
       {user && <LoginBadge user={user} />}
       {user && (
         <AddNewBlog
-          setNotification={() =>
-            setUpdateBlogList((updateBlogList) => !updateBlogList)
-          }
+          setNotification={setNotification}
           upadateBlogList={() => upadateBlogList}
           user={user}
         />
