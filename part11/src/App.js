@@ -5,17 +5,33 @@ import blogServices from "./services/blogs";
 import loginServices from "./services/login";
 import { useEffect, useState } from "react";
 import AddNewBlog from "./components/AddNewBlog";
+import Notification from "./components/Notification";
+import LoginBadge from "./components/LoginBadge";
 
 function App() {
   const [blogs, setBlogs] = useState([]);
   const [searchRequest, setSearchRequest] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState(null);
   const [user, setUser] = useState(null);
+  const [updateBlogList, setUpdateBlogList] = useState(false);
+
+  const upadateBlogList = () => {
+    setUpdateBlogList((updateBlogList) => !updateBlogList);
+  };
 
   useEffect(() => {
-    blogServices.getAll().then((response) => setBlogs(response.data));
-  }, []);
+    const getBlogList = async () => {
+      try {
+        const response = await blogServices.getAll();
+        setBlogs(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBlogList();
+  }, [updateBlogList]);
 
   useEffect(() => {
     const userData = window.localStorage.getItem("loggedInUser");
@@ -24,7 +40,7 @@ function App() {
       setUser(user);
       blogServices.setToken(user.token);
     }
-  });
+  }, []);
 
   const searchOnChangeHandler = (event) => {
     setSearchRequest(event.target.value);
@@ -51,6 +67,7 @@ function App() {
     password,
     setPassword,
     loginOnSubmitHandler,
+    setNotification,
   };
 
   const blogsList =
@@ -59,17 +76,21 @@ function App() {
       : blogs.filter((blog) =>
           blog.title.toLowerCase().includes(searchRequest.toLowerCase())
         );
-
   return (
     <div className='App'>
       {!user && <LoginForm props={loginComponentProps} />}
+      {user && <LoginBadge user={user} />}
       {user && (
-        <div>
-          <span>{user.name} is logged in</span>
-        </div>
+        <AddNewBlog
+          setNotification={() =>
+            setUpdateBlogList((updateBlogList) => !updateBlogList)
+          }
+          upadateBlogList={() => upadateBlogList}
+          user={user}
+        />
       )}
-      {user && <AddNewBlog user={user} />}
-      <Search onChangeHandler={searchOnChangeHandler} />
+      {notification && <Notification notification={notification} />}
+      <Search onChangeHandler={() => searchOnChangeHandler} />
       <BlogList blogs={blogsList} />
     </div>
   );
