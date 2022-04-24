@@ -4,6 +4,7 @@ import LoginForm from "./components/LoginForm";
 import blogServices from "./services/blogs";
 import loginServices from "./services/login";
 import { useEffect, useState } from "react";
+import AddNewBlog from "./components/AddNewBlog";
 
 function App() {
   useEffect(() => {
@@ -26,14 +27,13 @@ function App() {
     try {
       const user = await loginServices.login({ username, password });
       setUser(user);
+      blogServices.setToken(user.token);
       setUsername("");
       setPassword("");
     } catch (error) {
       console.log(error);
     }
   };
-
-  console.log(user);
 
   const loginComponentProps = {
     username,
@@ -52,7 +52,13 @@ function App() {
 
   return (
     <div className='App'>
-      <LoginForm props={loginComponentProps} />
+      {!user && <LoginForm props={loginComponentProps} />}
+      {user && (
+        <div>
+          <span>{user.name} is logged in</span>
+        </div>
+      )}
+      {user && <AddNewBlog user={user} />}
       <Search onChangeHandler={searchOnChangeHandler} />
       <BlogList blogs={blogsList} />
     </div>
