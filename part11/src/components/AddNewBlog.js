@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogServices from "../services/blogs";
 
-const AddNewBlog = ({ setNotification, upadateBlogList, user }) => {
+const AddNewBlog = ({ upadateBlogList, user }) => {
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
   const [likes, setLikes] = useState("");

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import AddNewBlog from "./components/AddNewBlog";
 import Notification from "./components/Notification";
 import LoginBadge from "./components/LoginBadge";
+import Toggable from "./components/Toggable";
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -20,7 +21,12 @@ function App() {
   const upadateBlogList = () => {
     setUpdateBlogList((updateBlogList) => !updateBlogList);
   };
-  console.log(notification);
+
+  const logOut = () => {
+    window.localStorage.removeItem("loggedInUser");
+    setUser(null);
+  };
+  console.log(user);
 
   useEffect(() => {
     const getBlogList = async () => {
@@ -54,7 +60,7 @@ function App() {
     try {
       const user = await loginServices.login({ username, password });
       setUser(user);
-      setNotification([`${username} is logged in`, "green"]);
+      setNotification([`${user.name} is logged in`, "green"]);
       setTimeout(() => {
         setNotification(null);
       }, 5000);
@@ -72,6 +78,7 @@ function App() {
   };
 
   const loginComponentProps = {
+    user,
     username,
     setUsername,
     password,
@@ -86,16 +93,15 @@ function App() {
       : blogs.filter((blog) =>
           blog.title.toLowerCase().includes(searchRequest.toLowerCase())
         );
+
   return (
     <div className='App'>
       {!user && <LoginForm props={loginComponentProps} />}
-      {user && <LoginBadge user={user} />}
+      {user && <LoginBadge user={user} logOut={logOut} />}
       {user && (
-        <AddNewBlog
-          setNotification={setNotification}
-          upadateBlogList={() => upadateBlogList}
-          user={user}
-        />
+        <Toggable>
+          <AddNewBlog upadateBlogList={upadateBlogList} user={user} />
+        </Toggable>
       )}
       {notification && <Notification notification={notification} />}
       <Search onChangeHandler={() => searchOnChangeHandler} />
