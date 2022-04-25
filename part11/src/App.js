@@ -99,7 +99,7 @@ function App() {
       {!user && <LoginForm props={loginComponentProps} />}
       {user && <LoginBadge user={user} logOut={logOut} />}
       {user && (
-        <Toggable>
+        <Toggable buttonName={"Show Form"}>
           <AddNewBlog upadateBlogList={upadateBlogList} user={user} />
         </Toggable>
       )}
