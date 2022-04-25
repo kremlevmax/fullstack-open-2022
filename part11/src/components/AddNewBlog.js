@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogServices from "../services/blogs";
 
-const AddNewBlog = ({ upadateBlogList, user }) => {
+const AddNewBlog = ({ forceUpadateBlogList, user }) => {
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
   const [likes, setLikes] = useState("");
@@ -19,7 +19,7 @@ const AddNewBlog = ({ upadateBlogList, user }) => {
     setTitle("");
     setURL("");
     setLikes("");
-    upadateBlogList();
+    forceUpadateBlogList();
   };
 
   return (

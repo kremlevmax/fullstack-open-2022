@@ -10,7 +10,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtyZ
 }
 
 ###
-DELETE http://localhost:3001/api/blogs/6261ff00555da5adcf18f654
+DELETE http://localhost:3001/api/blogs/62650601a51b2f0ce633f873
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtyZW1sZXZtYTQ0eDMxIiwiaWQiOiI2MjYxMTU3ZGY1YWQ3N2ZjNmNmYjdiNDkiLCJpYXQiOjE2NTA1MzA5Mzl9.zzO3RDuoFRQW-bUqd8eXpR_ujVGSvlC_0EkL0F2T8is
 
 ###
@@ -25,6 +25,17 @@ Content-Type: application/json
  "name": "Max Kremlev",
  "username": "kremlevma44x31",
  "password": "1233331" 
+}
+
+###
+PUT http://localhost:3001/api/blogs/625f811d8056a500bb5b4eb7
+Content-Type: application/json
+
+{
+  "title": "Blog 1",
+  "author": "Max",
+  "url": "www.max.com",
+  "likes": "9"
 }
   
 

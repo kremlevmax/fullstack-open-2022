@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Toggable from "./Toggable";
+import blogServices from "../services/blogs";
 
-const BlogList = ({ blogs }) => {
+const BlogList = ({ forceUpadateBlogList, blogs }) => {
+  const [liked, setLiked] = useState(false);
+
+  const addLike = async (event, blog) => {
+    event.preventDefault();
+    await blogServices.like(blog);
+    forceUpadateBlogList();
+  };
+
   const blogList = blogs.map((blog, index) => (
     <li key={index}>
       {blog.title}
@@ -9,7 +18,8 @@ const BlogList = ({ blogs }) => {
         <span>
           {" "}
           by {blog.author}. URL: {blog.url} Total likes: {blog.likes}
-        </span>
+        </span>{" "}
+        <button onClick={(event) => addLike(event, blog)}>Like</button>{" "}
       </Toggable>
     </li>
   ));

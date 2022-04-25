@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3001/api/blogs";
+const baseURL = "http://localhost:3001/api/blogs/";
 let token = null;
 
 const setToken = (tokenData) => {
@@ -18,4 +18,17 @@ const create = async (blogData) => {
   return response.data;
 };
 
-export default { getAll, create, setToken };
+const like = async (blogData) => {
+  console.log(blogData);
+  const URL = baseURL + blogData.id;
+  const updatedBlog = {
+    title: blogData.title,
+    author: blogData.author,
+    url: blogData.url,
+    likes: blogData.likes + 1,
+  };
+
+  await axios.put(URL, updatedBlog);
+};
+
+export default { getAll, create, setToken, like };

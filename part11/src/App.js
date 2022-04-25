@@ -18,7 +18,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [updateBlogList, setUpdateBlogList] = useState(false);
 
-  const upadateBlogList = () => {
+  const forceUpadateBlogList = () => {
     setUpdateBlogList((updateBlogList) => !updateBlogList);
   };
 
@@ -26,7 +26,6 @@ function App() {
     window.localStorage.removeItem("loggedInUser");
     setUser(null);
   };
-  console.log(user);
 
   useEffect(() => {
     const getBlogList = async () => {
@@ -45,7 +44,6 @@ function App() {
     if (userData) {
       const user = JSON.parse(userData);
       setUser(user);
-
       blogServices.setToken(user.token);
     }
   }, []);
@@ -100,12 +98,12 @@ function App() {
       {user && <LoginBadge user={user} logOut={logOut} />}
       {user && (
         <Toggable buttonName={"Show Form"}>
-          <AddNewBlog upadateBlogList={upadateBlogList} user={user} />
+          <AddNewBlog forceUpadateBlogList={forceUpadateBlogList} user={user} />
         </Toggable>
       )}
       {notification && <Notification notification={notification} />}
       <Search onChangeHandler={() => searchOnChangeHandler} />
-      <BlogList blogs={blogsList} />
+      <BlogList forceUpadateBlogList={forceUpadateBlogList} blogs={blogsList} />
     </div>
   );
 }
