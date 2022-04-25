@@ -19,16 +19,8 @@ const create = async (blogData) => {
 };
 
 const like = async (blogData) => {
-  console.log(blogData);
   const URL = baseURL + blogData.id;
-  const updatedBlog = {
-    title: blogData.title,
-    author: blogData.author,
-    url: blogData.url,
-    likes: blogData.likes + 1,
-  };
-
-  await axios.put(URL, updatedBlog);
+  await axios.put(URL, blogData);
 };
 
 export default { getAll, create, setToken, like };
