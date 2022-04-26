@@ -1,12 +1,14 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 
 const Toggable = forwardRef((props, ref) => {
+  Toggable.displayName = "Togglable";
   const [visible, setVisible] = useState(false);
   const showWhenVisible = visible === true ? "inline" : "none";
   const hideWhenVisible = visible === true ? "none" : "inline";
   const hideDetails = () => {
     setVisible(false);
   };
+
   useImperativeHandle(ref, () => {
     return {
       hideDetails,
