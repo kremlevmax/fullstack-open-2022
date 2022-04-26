@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import blogServices from "../services/blogs";
+import PropTypes from "prop-types";
 
 const AddNewBlog = ({ forceUpadateBlogList, user }) => {
+  AddNewBlog.propTypes = {
+    forceUpadateBlogList: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+  };
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
   const [likes, setLikes] = useState("");
