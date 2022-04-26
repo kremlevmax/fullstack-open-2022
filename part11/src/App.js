@@ -102,8 +102,14 @@ function App() {
         </Toggable>
       )}
       {notification && <Notification notification={notification} />}
-      <Search onChangeHandler={() => searchOnChangeHandler} />
-      <BlogList forceUpadateBlogList={forceUpadateBlogList} blogs={blogsList} />
+      {user && <Search onChangeHandler={() => searchOnChangeHandler} />}
+      {user && (
+        <BlogList
+          forceUpadateBlogList={forceUpadateBlogList}
+          blogs={blogsList}
+          user={user}
+        />
+      )}
     </div>
   );
 }
