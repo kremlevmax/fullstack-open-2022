@@ -19,9 +19,9 @@ const Toggable = forwardRef((props, ref) => {
     <div style={{ display: "inline" }}>
       <div style={{ display: hideWhenVisible }}>
         {" "}
-        <button onClick={() => setVisible(true)}>{props.buttonName}</button>
+        <button onClick={() => setVisible(true)}>{props.buttonLabel}</button>
       </div>
-      <div style={{ display: showWhenVisible }}>
+      <div style={{ display: showWhenVisible }} className='togglableContent'>
         {props.children}
         <button onClick={() => setVisible(false)}>Hide</button>
       </div>

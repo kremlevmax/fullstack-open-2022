@@ -97,7 +97,7 @@ function App() {
       {!user && <LoginForm props={loginComponentProps} />}
       {user && <LoginBadge user={user} logOut={logOut} />}
       {user && (
-        <Toggable buttonName={"Show Form"}>
+        <Toggable buttonLabel={"Show Form"}>
           <AddNewBlog forceUpadateBlogList={forceUpadateBlogList} user={user} />
         </Toggable>
       )}
