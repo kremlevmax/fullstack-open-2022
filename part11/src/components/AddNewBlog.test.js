@@ -20,7 +20,6 @@ test("Test add new Blog form", async () => {
   await userForTest.type(input2, "testing a form...");
   await userForTest.type(input3, "3");
   await userForTest.click(sendButton);
-
   expect(createBlog.mock.calls).toHaveLength(1);
-  //   expect(createBlog.mock.calls[0][0].content).toBe("testing a form...");
+  expect(createBlog.mock.calls[0][0].title).toBe("testing a form...");
 });
