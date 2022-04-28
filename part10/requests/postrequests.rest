@@ -10,7 +10,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtyZ
 }
 
 ###
-DELETE http://localhost:3001/api/blogs/62650601a51b2f0ce633f873
+DELETE http://localhost:3001/api/blogs/626730865c9ef019fe0515e5
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtyZW1sZXZtYTQ0eDMxIiwiaWQiOiI2MjYxMTU3ZGY1YWQ3N2ZjNmNmYjdiNDkiLCJpYXQiOjE2NTA1MzA5Mzl9.zzO3RDuoFRQW-bUqd8eXpR_ujVGSvlC_0EkL0F2T8is
 
 ###

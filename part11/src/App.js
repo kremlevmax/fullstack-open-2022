@@ -98,7 +98,11 @@ function App() {
       {user && <LoginBadge user={user} logOut={logOut} />}
       {user && (
         <Toggable buttonLabel={"Show Form"}>
-          <AddNewBlog forceUpadateBlogList={forceUpadateBlogList} user={user} />
+          <AddNewBlog
+            forceUpadateBlogList={forceUpadateBlogList}
+            user={user}
+            createBlog={blogServices.create}
+          />
         </Toggable>
       )}
       {notification && <Notification notification={notification} />}

@@ -39,12 +39,17 @@ const BlogListItem = ({ forceUpadateBlogList, blog, user }) => {
   return (
     <li>
       {blog.title}
-      <Toggable buttonName={"Show Details"} ref={listItemDetailsRef}>
+      <Toggable buttonLabel={"Show Details"} ref={listItemDetailsRef}>
         <span>
           {" "}
           by {blog.author}. URL: {blog.url} Total likes: {blog.likes}
         </span>{" "}
-        <button onClick={(event) => addLike(event, blog)}>{buttonName}</button>{" "}
+        <button
+          className='likeButton'
+          onClick={(event) => addLike(event, blog)}
+        >
+          {buttonName}
+        </button>{" "}
         {isShownDeleteButton && (
           <button onClick={(event) => deleteBlog(event, blog.id)}>
             Delete

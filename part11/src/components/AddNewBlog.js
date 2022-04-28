@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import blogServices from "../services/blogs";
+// import blogServices from "../services/blogs";
 import PropTypes from "prop-types";
 
-const AddNewBlog = ({ forceUpadateBlogList, user }) => {
+const AddNewBlog = ({ forceUpadateBlogList, user, createBlog }) => {
   AddNewBlog.propTypes = {
     forceUpadateBlogList: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
@@ -20,7 +20,7 @@ const AddNewBlog = ({ forceUpadateBlogList, user }) => {
 
   const createBlogOnSubmitHandler = async (event) => {
     event.preventDefault();
-    await blogServices.create(blogEntry);
+    await createBlog(blogEntry);
     setTitle("");
     setURL("");
     setLikes("");
@@ -32,17 +32,23 @@ const AddNewBlog = ({ forceUpadateBlogList, user }) => {
       <div>
         <span>Title:</span>
         <input
+          data-testid='textbox1'
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         />
       </div>
       <div>
         <span>URL:</span>
-        <input value={url} onChange={({ target }) => setURL(target.value)} />
+        <input
+          data-testid='textbox2'
+          value={url}
+          onChange={({ target }) => setURL(target.value)}
+        />
       </div>
       <div>
         <span>Likes:</span>
         <input
+          data-testid='textbox3'
           value={likes}
           onChange={({ target }) => setLikes(target.value)}
         />
