@@ -20,6 +20,11 @@ blogRouter.get("/:id", async (request, response, next) => {
   }
 });
 
+blogRouter.post("/reset", async (request, response) => {
+  await Blog.deleteMany({});
+  response.status(204).end();
+});
+
 blogRouter.put("/:id", async (request, response, next) => {
   const id = request.params.id;
   try {
